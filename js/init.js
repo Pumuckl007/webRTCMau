@@ -1,0 +1,2 @@
+var mau = {};
+mau.dataChannels = {};
