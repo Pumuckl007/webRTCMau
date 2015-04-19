@@ -6,6 +6,7 @@ mau.mitigationId = -1;
 mau.dataChannelNames = [];
 mau.dataChannelNameMap = [];
 mau.id = Math.random();
+mau.deck = {};
 var load = function(e){
   for(var i = 0; i<mau.onLoadFunctions.length; i++){
     mau.onLoadFunctions[i]();

@@ -9,6 +9,11 @@ mau.messageRouter.map = {};
 //additional-Channel-Connection-Request - asks to accept the answer given
 //additional-Channel-Connection-Return - reponse saying if it was sucsessfull or not
 //update-Id - sends id of the client
+//suffle-Deck - asks to encrypt and shuffle deck
+//suffel-Deck-finished - tell that all of the player have suffled and encryped
+//encrypt-Every-Card - tells to remove encryption and encrypt every card individualy
+//encrypt-Every-Card-finished - the final message regarding card encription, transfers the deck back
+//deck-update - the final giving out to everyone of the deck
 
 mau.messageRouter.registerKey = function(key, callBack){
   if(mau.messageRouter.map[key]){
@@ -19,6 +24,7 @@ mau.messageRouter.registerKey = function(key, callBack){
 };
 
 mau.messageRouter.message = function(message){
+  var hasProssesed = false;
   if(!mau.messageRouter.isJson(message)){
     console.log(message);
     return;
@@ -33,9 +39,13 @@ mau.messageRouter.message = function(message){
         if(allreadyCalled.indexOf(callBacks[k]) === -1){
           callBacks[k](parsedMessage);
           allreadyCalled.push(callBacks[k]);
+          hasProssesed = true;
         }
       }
     }
+  }
+  if(!hasProssesed){
+    console.log(parsedMessage);
   }
 };
 
@@ -48,8 +58,8 @@ mau.messageRouter.isJson = function(str) {
     return true;
 };
 
-mau.sendMessageToAll = function(str){
+mau.sendMessageToAll = function(json){
   for(var i = 0; i<mau.dataChannelNames.length; i++){
-    mau.dataChannels[mau.dataChannelNames[i]].send(str);
+    mau.dataChannels[mau.dataChannelNames[i]].send(JSON.stringify(json));
   }
 };
