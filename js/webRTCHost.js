@@ -8,7 +8,8 @@ function makeOffer (handleOffer, handleAnswer) {
   );
 
   peerConnection.createOffer(function (description) {
-    peerConnection.setLocalDescription(description, function () { });
+    peerConnection.setLocalDescription(description);
+
   });
 }
 
@@ -43,9 +44,10 @@ document.querySelector('#accept').addEventListener('click', function() {
 });
 
 var unOpedDataChannelId = Math.random();
+var unOpedDataChannel;
 
 try {
-  mau.dataChannels['mau-channel-' + unOpedDataChannelId] =
+  unOpedDataChannel =
     peerConnection.createDataChannel('mau-channel-' + unOpedDataChannelId, {
       reliable: true
     });
@@ -53,12 +55,25 @@ try {
   console.warn('no data channel');
 }
 
-mau.dataChannels['mau-channel-' + unOpedDataChannelId].onopen = function (e) {
-  console.log('Data channel open..');
+unOpedDataChannel.onopen = function (e) {
+  console.log('Data channel open to ' + e.currentTarget.label);
+  mau.dataChannels['mau-channel-' + unOpedDataChannelId] = unOpedDataChannel;
+  mau.currentlyMitigating = e.currentTarget.label.replace("mau-channel-", "");
+  mau.mitigationId = 0;
+  if(mau.dataChannelNames.length > 0){
+    mau.dataChannels[mau.dataChannelNames[mau.mitigationId]].send(JSON.stringify({
+      id:"additional-Channel-Offer-Request",
+      message:"",
+      sender:mau.dataChannelNames[mau.mitigationId].replace("mau-channel-", "")
+    }));
+  } else{
+    mau.dataChannelNames.push(e.currentTarget.label);
+  }
+  mau.mitigationId++;
 };
 
-mau.dataChannels['mau-channel-' + unOpedDataChannelId].onmessage = function (e) {
-  console.log('message', e.data);
+unOpedDataChannel.onmessage = function (e) {
+  mau.messageRouter.message(e.data);
 };
 
 peerConnection.createOffer(function (description) {

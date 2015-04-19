@@ -43,13 +43,23 @@ function onDataChannel (e) {
   mau.dataChannels[e.channel.label] = e.channel;
 
   mau.dataChannels[channleIndex].onmessage = function (e) {
-    console.log('message:', e.data);
-
+    mau.messageRouter.message(e.data);
   }
 
   mau.dataChannels[channleIndex].onopen = function (e) {
-    console.log('Data channel open...');
-    window.dataChannelOpen = true;
+    console.log('Data channel open to ' + e.currentTarget.label);
+    mau.currentlyMitigating = e.currentTarget.label.replace("mau-channel-", "");
+    mau.mitigationId = 0;
+    if(mau.dataChannelNames.length > 0){
+      mau.dataChannels[mau.dataChannelNames[mau.mitigationId]].send(JSON.stringify({
+        id:"additional-Channel-Offer-Request",
+        message:"",
+        sender:mau.dataChannelNames[mau.mitigationId].replace("mau-channel-", "")
+      }));
+    } else{
+      mau.dataChannelNames.push(e.currentTarget.label);
+    }
+    mau.mitigationId++;
   }
 
 }
