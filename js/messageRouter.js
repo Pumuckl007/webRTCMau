@@ -8,6 +8,7 @@ mau.messageRouter.map = {};
 //additional-Channel-Answer-Return - reponse to additional-Channel-Answer-Request that is given
 //additional-Channel-Connection-Request - asks to accept the answer given
 //additional-Channel-Connection-Return - reponse saying if it was sucsessfull or not
+//update-Id - sends id of the client
 
 mau.messageRouter.registerKey = function(key, callBack){
   if(mau.messageRouter.map[key]){
