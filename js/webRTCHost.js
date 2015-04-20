@@ -56,7 +56,6 @@ try {
 }
 
 unOpedDataChannel.onopen = function (e) {
-  console.log('Data channel open to ' + e.currentTarget.label);
   mau.dataChannels['mau-channel-' + unOpedDataChannelId] = unOpedDataChannel;
   unOpedDataChannel.send(JSON.stringify({
     id:"update-Id",

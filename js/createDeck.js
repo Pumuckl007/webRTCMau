@@ -119,7 +119,6 @@ mau.messageRouter.registerKey("encrypt-Every-Card-finished", function(message){
 
 mau.messageRouter.registerKey("deck-update", function(message){
   mau.deck = JSON.parse(atob(message.message));
-  console.log(message);
 });
 
 //generates a deck which is allways in the same order
@@ -216,7 +215,6 @@ mau.messageRouter.registerKey("encryption-key", function(message){
     }
   }else if(mau.decrypedDeck[message.cardNumber] && mau.decrypedDeck[message.cardNumber].length + 1 >= mau.dataChannelNames.length){
     mau.decrypedDeck[message.cardNumber].push(message.encryptionKey);
-    console.log(message.cardNumber);
     mau.decrypedDeck[message.cardNumber].push(mau.createDeck.keyArray[message.cardNumber]);
     mau.decrypedDeck[message.cardNumber] = mau.createDeck.decryptCard(mau.decrypedDeck[message.cardNumber], mau.deck[message.cardNumber]);
     var index = 0;

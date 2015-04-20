@@ -98,7 +98,14 @@ mau.messageRouter.registerKey("take-card-next", function(message){
       }
       mau.hand.push(card);
     } else {
-      console.log("Everyone has 5 cards");
+      var nextCardNumber = message.cardNumber;
+      everyoneHasCards = {
+        id:"everyone-has-cards",
+        firstUnusedCard:nextCardNumber,
+        sender:mau.id
+      }
+      mau.sendMessageToAll(everyoneHasCards);
+      mau.messageRouter.message(JSON.stringify(everyoneHasCards));
     }
   }
   else if(mau.deck.length <= message.cardNumber +1){

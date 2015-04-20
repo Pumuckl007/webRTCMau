@@ -39,7 +39,6 @@ mau.onLoadFunctions.push(function(){
     }
 
     mau.dataChannels['mau-channel-' + unOpedDataChannelId].onopen = function (e) {
-      console.log('Data channel open to ' + e.currentTarget.label);
       mau.dataChannelNames.push(e.currentTarget.label);
       mau.dataChannels[e.currentTarget.label].send(JSON.stringify({
         id:"update-Id",
@@ -102,7 +101,6 @@ mau.onLoadFunctions.push(function(){
         }
 
         mau.dataChannels[channleIndex].onopen = function (e) {
-          console.log('Data channel open to ' + e.currentTarget.label);
           mau.dataChannelNames.push(e.currentTarget.label);
           mau.dataChannels[e.currentTarget.label].send(JSON.stringify({
             id:"update-Id",

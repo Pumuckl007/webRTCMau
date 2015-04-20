@@ -47,7 +47,6 @@ function onDataChannel (e) {
   }
 
   mau.dataChannels[channleIndex].onopen = function (e) {
-    console.log('Data channel open to ' + e.currentTarget.label);
     mau.dataChannels[e.currentTarget.label].send(JSON.stringify({
       id:"update-Id",
       message:mau.id,
