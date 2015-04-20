@@ -14,6 +14,8 @@ mau.messageRouter.map = {};
 //encrypt-Every-Card - tells to remove encryption and encrypt every card individualy
 //encrypt-Every-Card-finished - the final message regarding card encription, transfers the deck back
 //deck-update - the final giving out to everyone of the deck
+//take-card - tell the player and the card they took from the deck
+//encryption-key - sends the encryption key for one card
 
 mau.messageRouter.registerKey = function(key, callBack){
   if(mau.messageRouter.map[key]){
@@ -22,6 +24,12 @@ mau.messageRouter.registerKey = function(key, callBack){
     mau.messageRouter.map[key] = [callBack];
   }
 };
+
+mau.messageRouter.send = function(id, message){
+  message.sender = mau.id;
+  var dataChannel = mau.dataChannels[mau.dataChannelNames[mau.dataChannelNameMap.indexOf(id)]];
+  dataChannel.send(JSON.stringify(message));
+}
 
 mau.messageRouter.message = function(message){
   var hasProssesed = false;

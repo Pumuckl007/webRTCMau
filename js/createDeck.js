@@ -114,10 +114,12 @@ mau.messageRouter.registerKey("encrypt-Every-Card-finished", function(message){
     sender:mau.id
   };
   mau.sendMessageToAll(message);
+  setTimeout(mau.player.takeCard,1000);
 });
 
 mau.messageRouter.registerKey("deck-update", function(message){
   mau.deck = JSON.parse(atob(message.message));
+  console.log(message);
 });
 
 //generates a deck which is allways in the same order
@@ -197,3 +199,33 @@ mau.createDeck.encrypt = function(string, key){
   }
   return string;
 }
+
+mau.createDeck.decryptCard = function(keys, card){
+  for(var i = 0; i<keys.length; i++){
+    card = mau.createDeck.encrypt(card, keys[i])
+  }
+  return card;
+}
+
+mau.messageRouter.registerKey("encryption-key", function(message){
+  if(mau.dataChannelNames.length === 1){
+    var keys = [message.encryptionKey, mau.createDeck.keyArray[message.cardNumber]];
+    mau.decrypedDeck[message.cardNumber] = mau.createDeck.decryptCard(keys, mau.deck[message.cardNumber]);
+    if((index = mau.hand.indexOf(mau.deck[message.cardNumber])) != -1){
+      mau.hand[index] = mau.decrypedDeck[message.cardNumber];
+    }
+  }else if(mau.decrypedDeck[message.cardNumber] && mau.decrypedDeck[message.cardNumber].length + 1 >= mau.dataChannelNames.length){
+    mau.decrypedDeck[message.cardNumber].push(message.encryptionKey);
+    console.log(message.cardNumber);
+    mau.decrypedDeck[message.cardNumber].push(mau.createDeck.keyArray[message.cardNumber]);
+    mau.decrypedDeck[message.cardNumber] = mau.createDeck.decryptCard(mau.decrypedDeck[message.cardNumber], mau.deck[message.cardNumber]);
+    var index = 0;
+    if((index = mau.hand.indexOf(mau.deck[message.cardNumber])) != -1){
+      mau.hand[index] = mau.decrypedDeck[message.cardNumber];
+    }
+  } else if(mau.decrypedDeck[message.cardNumber]){
+    mau.decrypedDeck[message.cardNumber].push(message.encryptionKey);
+  } else {
+    mau.decrypedDeck[message.cardNumber] = [message.encryptionKey];
+  }
+});

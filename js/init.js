@@ -7,6 +7,8 @@ mau.dataChannelNames = [];
 mau.dataChannelNameMap = [];
 mau.id = Math.random();
 mau.deck = {};
+mau.decrypedDeck = [];
+
 var load = function(e){
   for(var i = 0; i<mau.onLoadFunctions.length; i++){
     mau.onLoadFunctions[i]();
