@@ -141,10 +141,24 @@ mau.messageRouter.registerKey("take-card-next", function(message){
   }
 });
 
+mau.setNick = function(name){
+  var nick = {
+    id:"nick",
+    name:name,
+    sender:mau.id
+  }
+  mau.sendMessageToAll(nick);
+}
+
+mau.messageRouter.registerKey("nick", function(message){
+  mau.players[mau.playerNames.indexOf(message.sender)].nick = message.name;
+});
+
 mau.newPlayer = function(name){
   var player = {
     name:name,
     cards:[],
+    nick:"Foo Bar",
     numberOfCards:0
   };
   return player;

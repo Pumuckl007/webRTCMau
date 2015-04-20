@@ -65,3 +65,22 @@ mau.messageRouter.registerKey("play-card", function(message){
   mau.playDeck.push(message.card);
   mau.players[mau.playerNames.indexOf(message.sender)].numberOfCards --;
 });
+
+mau.unplayedDeck.penelize = function(playerId, reason){
+  playCard = {
+    id:"penilize-player",
+    player:playerId,
+    reason:reason,
+    sender:mau.id
+  }
+  mau.sendMessageToAll(playCard);
+}
+
+mau.messageRouter.registerKey("penilize-player", function(message){
+  if(mau.id === message.player){
+    console.log(mau.players[mau.playerNames.indexOf(message.sender)].nick + " is penilizeing you for " + message.reason)
+    console.log("exicute mau.accept(), or mau.reject() to accept or reject the penalty");
+  } else {
+    console.log(mau.players[mau.playerNames.indexOf(message.sender)].nick + " is penilizeing " + mau.players[mau.playerNames.indexOf(message.player)].nick + " because of " + message.reason);
+  }
+});
