@@ -48,3 +48,20 @@ mau.messageRouter.registerKey("reveal-top-card", function(message){
   }
   mau.sendMessageToAll(playdeckCardDecryption);
 });
+
+mau.hand.playCard = function(card){
+  var cayrd = mau.hand[card];
+  playCard = {
+    id:"play-card",
+    card:cayrd,
+    sender:mau.id
+  }
+  mau.sendMessageToAll(playCard);
+  mau.hand.splice(card,1);
+  mau.playDeck.push(playCard.card);
+}
+
+mau.messageRouter.registerKey("play-card", function(message){
+  mau.playDeck.push(message.card);
+  mau.players[mau.playerNames.indexOf(message.sender)].numberOfCards --;
+});
