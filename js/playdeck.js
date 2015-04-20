@@ -28,3 +28,23 @@ mau.messageRouter.registerKey("play-deck-card-decryption", function(message){
     mau.playDeckCardDecryption = [];
   }
 });
+
+mau.playDeck.revealTopCard = function(){
+  var revealTopCard = {
+    id:"reveal-top-card",
+    sender:mau.id
+  }
+  mau.sendMessageToAll(revealTopCard);
+  mau.messageRouter.message(JSON.stringify(revealTopCard));
+}
+
+mau.messageRouter.registerKey("reveal-top-card", function(message){
+  mau.unplayDeckOffset ++;
+  mau.playDeckCard ++;
+  var playdeckCardDecryption = {
+    id:"play-deck-card-decryption",
+    key:mau.createDeck.keyArray[mau.playDeckOffset + 1 + mau.playDeckCard],
+    sender:mau.id
+  }
+  mau.sendMessageToAll(playdeckCardDecryption);
+});
