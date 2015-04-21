@@ -17,6 +17,25 @@ mau.createDeck.makeAndSend = function(){
   mau.dataChannels[mau.dataChannelNames[0]].send(message);
 }
 
+mau.createDeck.usePlaydeckAndSend = function(){
+  mau.createDeck.singleKey = mau.createDeck.generateRandomKey();
+  var deck = [];
+  while(mau.playDeck.length > 1){
+    deck.push(mau.playDeck[0]);
+    mau.playDeck.shift(-1);
+  }
+  deck = mau.createDeck.encryptAllCards(mau.createDeck.singleKey, deck);
+  deck = mau.createDeck.suffel(deck);
+  var message = JSON.stringify({
+    id:"suffel-Deck",
+    message:btoa(JSON.stringify(deck)),
+    sender:mau.id,
+    originalSender:mau.id,
+    allreadySuffeld:[mau.id]
+  });
+  mau.dataChannels[mau.dataChannelNames[0]].send(message);
+}
+
 mau.messageRouter.registerKey("suffel-Deck", function(message){
   mau.createDeck.singleKey = mau.createDeck.generateRandomKey();
   var deck = JSON.parse(atob(message.message));
@@ -55,6 +74,7 @@ mau.messageRouter.registerKey("suffel-Deck", function(message){
 mau.messageRouter.registerKey("suffel-Deck-finished", function(message){
   var deck = JSON.parse(atob(message.message));
   deck = mau.createDeck.encryptAllCards(mau.createDeck.singleKey, deck);
+  mau.createDeck.keyArray = [];
   for(var i = 0; i<deck.length; i++){
     mau.createDeck.keyArray[i] = mau.createDeck.generateRandomKey();
   }
@@ -72,6 +92,7 @@ mau.messageRouter.registerKey("suffel-Deck-finished", function(message){
 mau.messageRouter.registerKey("encrypt-Every-Card", function(message){
   var deck = JSON.parse(atob(message.message));
   deck = mau.createDeck.encryptAllCards(mau.createDeck.singleKey, deck);
+  mau.createDeck.keyArray = [];
   for(var i = 0; i<deck.length; i++){
     mau.createDeck.keyArray[i] = mau.createDeck.generateRandomKey();
   }
@@ -114,11 +135,39 @@ mau.messageRouter.registerKey("encrypt-Every-Card-finished", function(message){
     sender:mau.id
   };
   mau.sendMessageToAll(message);
-  setTimeout(mau.player.takeCard,1000);
+  if(mau.drawCards){
+    setTimeout(mau.player.takeCard,1000);
+    mau.drawCards = false;
+  } else {
+    setTimeout(mau.createDeck.updateUnplayedDeck, 1000);
+  }
 });
+
+mau.createDeck.updateUnplayedDeck = function(){
+  var messageToBeSent = {
+    id:"update-unplayedDeck",
+    sender:mau.id
+  };
+  mau.sendMessageToAll(messageToBeSent);
+  mau.playDeckOffset = 0;
+  mau.unplayDeckOffset = 1;
+  for(var i = mau.unplayDeckOffset; i<mau.deck.length; i++){
+    mau.unplayedDeck[i-mau.unplayDeckOffset] = mau.deck[i];
+  }
+  mau.decrypedDeck = [];
+}
 
 mau.messageRouter.registerKey("deck-update", function(message){
   mau.deck = JSON.parse(atob(message.message));
+});
+
+mau.messageRouter.registerKey("update-unplayedDeck", function(message){
+  mau.playDeckOffset = 0;
+  mau.unplayDeckOffset = 1;
+  for(var i = mau.unplayDeckOffset; i<mau.deck.length; i++){
+    mau.unplayedDeck[i-mau.unplayDeckOffset] = mau.deck[i];
+  }
+  mau.decrypedDeck = [];
 });
 
 //generates a deck which is allways in the same order

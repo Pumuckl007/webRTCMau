@@ -28,6 +28,7 @@ mau.player.takeCard = function(){
 }
 
 mau.messageRouter.registerKey("take-card", function(message){
+  mau.drawCards = false;
   if(mau.playerNames.indexOf(message.sender) === -1){
     mau.players[mau.playerNames.length] = mau.newPlayer(message.sender);
     mau.playerNames.push(message.sender);
@@ -45,6 +46,7 @@ mau.messageRouter.registerKey("take-card", function(message){
 });
 
 mau.messageRouter.registerKey("take-card-next", function(message){
+  mau.drawCards = false;
   if(mau.playerNames.indexOf(message.sender) === -1){
     mau.players[mau.playerNames.length] = mau.newPlayer(message.sender);
     mau.playerNames.push(message.sender);
