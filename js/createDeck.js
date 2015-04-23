@@ -150,8 +150,8 @@ mau.createDeck.updateUnplayedDeck = function(){
   };
   mau.sendMessageToAll(messageToBeSent);
   mau.playDeckOffset = 0;
-  mau.unplayDeckOffset = 1;
-  for(var i = mau.unplayDeckOffset; i<mau.deck.length; i++){
+  mau.unplayDeckOffset = 0;
+  for(var i = 0; i<mau.deck.length; i++){
     mau.unplayedDeck[i-mau.unplayDeckOffset] = mau.deck[i];
   }
   mau.decrypedDeck = [];
@@ -163,8 +163,8 @@ mau.messageRouter.registerKey("deck-update", function(message){
 
 mau.messageRouter.registerKey("update-unplayedDeck", function(message){
   mau.playDeckOffset = 0;
-  mau.unplayDeckOffset = 1;
-  for(var i = mau.unplayDeckOffset; i<mau.deck.length; i++){
+  mau.unplayDeckOffset = 0;
+  for(var i = 0; i<mau.deck.length; i++){
     mau.unplayedDeck[i-mau.unplayDeckOffset] = mau.deck[i];
   }
   mau.decrypedDeck = [];
@@ -259,6 +259,7 @@ mau.messageRouter.registerKey("encryption-key", function(message){
   if(mau.dataChannelNames.length === 1){
     var keys = [message.encryptionKey, mau.createDeck.keyArray[message.cardNumber]];
     mau.decrypedDeck[message.cardNumber] = mau.createDeck.decryptCard(keys, mau.deck[message.cardNumber]);
+    var index = 0;
     if((index = mau.hand.indexOf(mau.deck[message.cardNumber])) != -1){
       mau.hand[index] = mau.decrypedDeck[message.cardNumber];
     }
