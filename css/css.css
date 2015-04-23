@@ -1,0 +1,64 @@
+.connection-ui{
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:90%;
+  left:0;
+  margin-left:4px;
+  border-right:1px solid #A4A4A4;
+}
+
+.hand{
+  position:absolute;
+  top:0;
+  height:30%;
+  font-size:5em;
+  left:10%;
+  right:30%;
+  margin-top:2%;
+  overflow-y:hidden;
+  overflow-x:scroll;
+  white-space: nowrap;
+}
+
+.playdeck{
+  position:absolute;
+  top:25%;
+  height:30%;
+  font-size:5em;
+  left:10%;
+  right:30%;
+  margin-top:5%;
+  overflow-y:hidden;
+  overflow-x:scroll;
+  white-space: nowrap
+}
+
+.players{
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:70%;
+  border-left:1px solid #A4A4A4;
+}
+
+.yourplayer{
+  position:absolute;
+  top:0;
+  height:30px;
+  left:0;
+  right:0;
+  border-bottom:1px solid #A4A4A4;
+  padding-left:5px;
+  padding-top:5px;
+}
+
+.restofplayers{
+  position:absolute;
+  top:35px;
+  bottom:0;
+  left:0;
+  right:0;
+  overflow-y:scroll;
+}

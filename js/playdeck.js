@@ -127,7 +127,7 @@ mau.accept = function(){
   }
   mau.sendMessageToAll(accept);
   mau.hand.push(mau.unplayedDeck[0]);
-  setTimeout(mau.acceptCont, 1000);
+  setTimeout(mau.acceptCont, 200);
 };
 
 mau.acceptCont = function(){

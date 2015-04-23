@@ -1,9 +1,13 @@
 <!Doctype HTML>
+
 <head>
   <title>Mau with webRTC</title>
+  <link rel="stylesheet" href="css/css.css" />
 </head>
+
 <body>
-  <div>
+  <div class="connection-ui">
+    <div>
       <label for="offer">Offer</label>
       <textarea name="offer" id="offer" rows="1" cols="8"></textarea>
     </div>
@@ -13,6 +17,16 @@
     </div>
     <button type="button" id="accept">Accept Answer</button>
     <button type="button" id="connect">Accept Offer</button>
+  </div>
+  <div class="hand" id="hand"></div>
+  <div class="playdeck" id="playdeck"></div>
+  <div class="players" id="players">
+    <div class="yourplayer" id="yourplayer">
+      Player Name:
+      <input class="yourplayername" id="yourplayername"></input>
+    </div>
+    <div class="restofplayers" id="restofplayers"></div>
+  </div>
 
   <script src="js/init.js"></script>
   <script src="js/webRTCHost.js"></script>
@@ -22,4 +36,5 @@
   <script src="js/createDeck.js"></script>
   <script src="js/players.js"></script>
   <script src="js/playdeck.js"></script>
+  <script src="js/UI.js"></script>
 </body>
